@@ -1,17 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
 using YourProjectName.Models;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace YourProjectName.Controllers
 {
     public class ItemsController : Controller
     {
-        private static List<Item> items = new List<Item>();
-        private static int nextId = 1;
+        private readonly AppDbContext _context;
+        public ItemsController(AppDbContext context)
+        {
+            _context = context;
+        }
 
         public IActionResult Index()
         {
+            var items = _context.Items.ToList();
             return View(items);
         }
 
@@ -25,8 +28,8 @@ namespace YourProjectName.Controllers
         {
             if (ModelState.IsValid)
             {
-                item.Id = nextId++;
-                items.Add(item);
+                _context.Items.Add(item);
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(item);
@@ -34,7 +37,7 @@ namespace YourProjectName.Controllers
 
         public IActionResult Edit(int id)
         {
-            var item = items.FirstOrDefault(i => i.Id == id);
+            var item = _context.Items.Find(id);
             if (item == null) return NotFound();
             return View(item);
         }
@@ -42,11 +45,10 @@ namespace YourProjectName.Controllers
         [HttpPost]
         public IActionResult Edit(Item item)
         {
-            var existing = items.FirstOrDefault(i => i.Id == item.Id);
-            if (existing == null) return NotFound();
             if (ModelState.IsValid)
             {
-                existing.Name = item.Name;
+                _context.Items.Update(item);
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(item);
@@ -54,7 +56,7 @@ namespace YourProjectName.Controllers
 
         public IActionResult Delete(int id)
         {
-            var item = items.FirstOrDefault(i => i.Id == id);
+            var item = _context.Items.Find(id);
             if (item == null) return NotFound();
             return View(item);
         }
@@ -62,15 +64,18 @@ namespace YourProjectName.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirmed(int id)
         {
-            var item = items.FirstOrDefault(i => i.Id == id);
+            var item = _context.Items.Find(id);
             if (item != null)
-                items.Remove(item);
+            {
+                _context.Items.Remove(item);
+                _context.SaveChanges();
+            }
             return RedirectToAction("Index");
         }
 
         public IActionResult Details(int id)
         {
-            var item = items.FirstOrDefault(i => i.Id == id);
+            var item = _context.Items.Find(id);
             if (item == null) return NotFound();
             return View(item);
         }
