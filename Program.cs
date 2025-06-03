@@ -31,5 +31,11 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+// Automatically apply migrations at startup
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<YourProjectName.Models.AppDbContext>();
+    db.Database.Migrate();
+}
 
 app.Run();

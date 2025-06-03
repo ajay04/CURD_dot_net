@@ -17,17 +17,21 @@ This is a simple ASP.NET Core CRUD (Create, Read, Update, Delete) application us
 ### Setup
 1. Restore dependencies:
    ```bash
-   dotnet restore
+   dotnet restore CURD_net.sln
    ```
-2. Apply database migrations:
+2. Apply database migrations (optional, handled automatically at runtime):
    ```bash
    dotnet ef database update
    ```
-3. Run the application:
+3. Publish a single-file, self-contained Linux executable (includes static files):
    ```bash
-   dotnet run
-   or
-   dotnet watch run
+   dotnet publish -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true
+   ```
+   The output will be in `bin/Release/net9.0/linux-x64/publish/`.
+4. Run the application from the publish directory:
+   ```bash
+   cd bin/Release/net9.0/linux-x64/publish/
+   ./YourProjectName
    ```
 
 The app will be available at `https://localhost:5001` or `http://localhost:5000` by default.
