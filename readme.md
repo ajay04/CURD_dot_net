@@ -28,11 +28,31 @@ This is a simple ASP.NET Core CRUD (Create, Read, Update, Delete) application us
    dotnet publish -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true
    ```
    The output will be in `bin/Release/net9.0/linux-x64/publish/`.
-4. Run the application from the publish directory:
+4. Publish a single-file, self-contained Windows executable:
    ```bash
-   cd bin/Release/net9.0/linux-x64/publish/
-   ./YourProjectName
+   dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true
    ```
+   The output will be in `bin/Release/net9.0/win-x64/publish/`.
+5. Run the application from the publish directory:
+   - On Linux:
+     ```bash
+     cd bin/Release/net9.0/linux-x64/publish/
+     ./YourProjectName
+     ```
+   - On Windows:
+     ```cmd
+     cd bin\Release\net9.0\win-x64\publish
+     YourProjectName.exe
+     ```
+6. (Optional) Create a Windows installer (.exe) for easy distribution:
+   - Use a tool like [Inno Setup](https://jrsoftware.org/isinfo.php), [NSIS](https://nsis.sourceforge.io/), or [WiX Toolset](https://wixtoolset.org/) on Windows.
+   - Package all files from `bin/Release/net9.0/win-x64/publish/` into your installer.
+   - The installer can create shortcuts and add your app to the Start menu.
+
+   Example (Inno Setup):
+   1. Download and install Inno Setup on your Windows machine.
+   2. Use the Inno Setup Wizard to select your published folder and configure installer options.
+   3. Build the installer to generate a single .exe setup file for distribution.
 
 The app will be available at `https://localhost:5001` or `http://localhost:5000` by default.
 
