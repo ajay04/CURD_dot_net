@@ -28,4 +28,7 @@ Thumbs.db
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
-*.db
+*.db*
+
+
+*.sln

@@ -26,6 +26,8 @@ This is a simple ASP.NET Core CRUD (Create, Read, Update, Delete) application us
 3. Run the application:
    ```bash
    dotnet run
+   or
+   dotnet watch run
    ```
 
 The app will be available at `https://localhost:5001` or `http://localhost:5000` by default.
