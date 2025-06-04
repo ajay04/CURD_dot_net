@@ -24,15 +24,13 @@ namespace YourProjectName.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Item item)
+        public IActionResult Create([FromBody] Item item)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Items.Add(item);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(item);
+            if (item == null || string.IsNullOrWhiteSpace(item.Name))
+                return BadRequest("Invalid item data.");
+            _context.Items.Add(item);
+            _context.SaveChanges();
+            return Json(new { success = true, redirectUrl = Url.Action("Index") });
         }
 
         public IActionResult Edit(int id)
@@ -43,15 +41,13 @@ namespace YourProjectName.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Item item)
+        public IActionResult Edit([FromBody] Item item)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Items.Update(item);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(item);
+            if (item == null || string.IsNullOrWhiteSpace(item.Name))
+                return BadRequest("Invalid item data.");
+            _context.Items.Update(item);
+            _context.SaveChanges();
+            return Json(new { success = true, redirectUrl = Url.Action("Index") });
         }
 
         public IActionResult Delete(int id)
@@ -61,16 +57,17 @@ namespace YourProjectName.Controllers
             return View(item);
         }
 
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirmed(int id)
+        [HttpPost]
+        public IActionResult Delete([FromBody] Item item)
         {
-            var item = _context.Items.Find(id);
-            if (item != null)
-            {
-                _context.Items.Remove(item);
-                _context.SaveChanges();
-            }
-            return RedirectToAction("Index");
+            if (item == null || item.Id == 0)
+                return BadRequest("Invalid item data.");
+            var dbItem = _context.Items.Find(item.Id);
+            if (dbItem == null)
+                return NotFound("Item not found.");
+            _context.Items.Remove(dbItem);
+            _context.SaveChanges();
+            return Json(new { success = true, redirectUrl = Url.Action("Index") });
         }
 
         public IActionResult Details(int id)

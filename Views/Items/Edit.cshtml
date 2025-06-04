@@ -35,12 +35,13 @@
                 e.preventDefault();
                 fetch('/Items/Edit', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `Id=${encodeURIComponent(this.item.Id)}&Name=${encodeURIComponent(this.item.Name)}`
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(this.item)
                 })
-                .then(res => {
-                    if (res.redirected) {
-                        window.location = res.url;
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.redirectUrl) {
+                        window.location = data.redirectUrl;
                     } else {
                         alert('Failed to update item.');
                     }

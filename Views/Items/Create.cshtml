@@ -13,7 +13,7 @@
     <form id="vueCreateForm">
         <div class="form-group">
             <label for="name">Name</label>
-            <input v-model="item.name" id="name" name="Name" class="form-control" required />
+            <input v-model="item.Name" id="name" name="Name" class="form-control" required />
         </div>
         <button type="submit" class="btn btn-primary">Create</button>
         <a href="/Items" class="btn btn-secondary">Back to List</a>
@@ -24,7 +24,7 @@
     new Vue({
         el: '#app',
         data: {
-            item: { name: '' }
+            item: { Name: '' }
         },
         mounted() {
             document.getElementById('vueCreateForm').addEventListener('submit', this.submitForm);
@@ -37,9 +37,10 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(this.item)
                 })
-                .then(res => {
-                    if (res.redirected) {
-                        window.location = res.url;
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.redirectUrl) {
+                        window.location = data.redirectUrl;
                     } else {
                         alert('Failed to create item.');
                     }
