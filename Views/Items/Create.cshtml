@@ -1,17 +1,50 @@
 @model YourProjectName.Models.Item
 
-<h2>Create New Item</h2>
-
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Create</button>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-</form>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@using System.Text.Json
+@{
+    Layout = "_Layout";
 }
+
+<!-- Vue.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+<div id="app">
+    <h2>Create New Item</h2>
+    <form id="vueCreateForm">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input v-model="item.name" id="name" name="Name" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a href="/Items" class="btn btn-secondary">Back to List</a>
+    </form>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            item: { name: '' }
+        },
+        mounted() {
+            document.getElementById('vueCreateForm').addEventListener('submit', this.submitForm);
+        },
+        methods: {
+            submitForm(e) {
+                e.preventDefault();
+                fetch('/Items/Create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(this.item)
+                })
+                .then(res => {
+                    if (res.redirected) {
+                        window.location = res.url;
+                    } else {
+                        alert('Failed to create item.');
+                    }
+                });
+            }
+        }
+    });
+</script>

@@ -1,10 +1,28 @@
 @model YourProjectName.Models.Item
+@using System.Text.Json
+@{
+    Layout = "_Layout";
+}
 
-<h2>Item Details</h2>
-<dl class="row">
-    <dt class="col-sm-2">ID</dt>
-    <dd class="col-sm-10">@Model.Id</dd>
-    <dt class="col-sm-2">Name</dt>
-    <dd class="col-sm-10">@Model.Name</dd>
-</dl>
-<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+<!-- Vue.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+<div id="app">
+    <h2>Item Details</h2>
+    <dl class="row">
+        <dt class="col-sm-2">ID</dt>
+        <dd class="col-sm-10">{{ item.Id }}</dd>
+        <dt class="col-sm-2">Name</dt>
+        <dd class="col-sm-10">{{ item.Name }}</dd>
+    </dl>
+    <a href="/Items" class="btn btn-secondary">Back to List</a>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            item: @Html.Raw(JsonSerializer.Serialize(Model))
+        }
+    });
+</script>
