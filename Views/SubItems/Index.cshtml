@@ -1,0 +1,35 @@
+@model IEnumerable<YourProjectName.Models.SubItem>
+@{
+    ViewData["Title"] = "SubItems";
+    var itemId = ViewBag.ItemId;
+}
+
+<h2>SubItems for Item @itemId</h2>
+<p>
+    <a class="btn btn-success" href="/SubItems/Create?itemId=@itemId">Create New SubItem</a>
+    <a class="btn btn-secondary" href="/Items">Back to Items</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var sub in Model)
+            {
+                <tr>
+                    <td>@sub.Id</td>
+                    <td>@sub.Name</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="2">No subitems found.</td></tr>
+        }
+    </tbody>
+</table>

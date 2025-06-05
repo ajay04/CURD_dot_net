@@ -29,10 +29,11 @@
                     <a class="btn btn-info btn-sm" :href="'/Items/Details/' + item.Id">Details</a>
                     <a class="btn btn-warning btn-sm" :href="'/Items/Edit/' + item.Id">Edit</a>
                     <a class="btn btn-danger btn-sm" :href="'/Items/Delete/' + item.Id">Delete</a>
+                    <a class="btn btn-secondary btn-sm" :href="'/SubItems?itemId=' + item.Id">SubItems</a>
                 </td>
             </tr>
             <tr v-if="items.length === 0">
-                <td colspan="3">No items found.</td>
+                <td colspan="4">No items found.</td>
             </tr>
         </tbody>
     </table>
